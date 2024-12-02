@@ -1,0 +1,181 @@
+//se pude faça que ele fique mais leve porque tá um pouco mal otimizado kkk
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bolinhas Neon Conectadas e Ramificadas</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  class Ball {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.radius = 8;
+      this.dx = (Math.random() - 0.5) * 2;
+      this.dy = (Math.random() - 0.5) * 2;
+      this.color = `hsl(${Math.random() * 360}, 100%, 50%)`; // Neon color
+      this.children = [];
+      this.isDuplicated = false;
+    }
+
+    draw() {
+      // Apply neon effect
+      ctx.shadowColor = this.color;  // Set neon color
+      ctx.shadowBlur = 15;           // Set glow intensity
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.closePath();
+
+      // Draw lines to children with a slight neon effect
+      this.children.forEach(child => {
+        ctx.shadowColor = '#00FFFF'; // Neon cyan color for lines
+        ctx.shadowBlur = 5; // Less intense for lines
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(child.x, child.y);
+        ctx.strokeStyle = 'white'; // White line color
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.closePath();
+      });
+    }
+
+    update() {
+      this.x += this.dx;
+      this.y += this.dy;
+
+      // Bounce off walls
+      if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+        this.dx = -this.dx;
+      }
+      if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+        this.dy = -this.dy;
+      }
+    }
+
+    duplicate() {
+      if (this.isDuplicated) return; // Prevent duplicating multiple times
+      this.isDuplicated = true;
+
+      // Create two children
+      const angle1 = Math.random() * Math.PI * 2;
+      const angle2 = Math.random() * Math.PI * 2;
+      const distance = 50;
+
+      const child1 = new Ball(
+        this.x + Math.cos(angle1) * distance,
+        this.y + Math.sin(angle1) * distance
+      );
+
+      const child2 = new Ball(
+        this.x + Math.cos(angle2) * distance,
+        this.y + Math.sin(angle2) * distance
+      );
+
+      this.children.push(child1, child2);
+
+      return [child1, child2];
+    }
+  }
+
+  const balls = [new Ball(canvas.width / 2, canvas.height / 2)];
+
+  function connectBalls() {
+    for (let i = 0; i < balls.length; i++) {
+      for (let j = i + 1; j < balls.length; j++) {
+        const dist = Math.hypot(balls[i].x - balls[j].x, balls[i].y - balls[j].y);
+        if (dist < 150) { // Only draw lines for close balls
+          ctx.shadowColor = '#00FFFF'; // Neon cyan for connecting lines
+          ctx.shadowBlur = 5; // Glow for lines
+          ctx.beginPath();
+          ctx.moveTo(balls[i].x, balls[i].y);
+          ctx.lineTo(balls[j].x, balls[j].y);
+          ctx.strokeStyle = 'white'; // White line color
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    balls.forEach(ball => {
+      ball.update();
+      ball.draw();
+    });
+
+    connectBalls();
+    requestAnimationFrame(animate);
+  }
+
+  // Duplicar as bolinhas a cada 3 segundos
+  setInterval(() => {
+    balls.forEach(ball => {
+      const newBalls = ball.duplicate();
+      if (newBalls) {
+        balls.push(...newBalls);
+      }
+    });
+  }, 4780); // 3000 ms = 3 segundos
+
+  canvas.addEventListener('click', event => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Add a new ball where the user clicks
+    const newBall = new Ball(mouseX, mouseY);
+    balls.push(newBall);
+
+    // Visual feedback
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        ctx.shadowColor = '#00FFFF';  // Neon color for click feedback
+        ctx.shadowBlur = 10; // Glow effect for click
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, 10 + i * 5, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - i * 0.2})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+      }, i * 50);
+    }
+  });
+
+  // Adjust canvas size on resize
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  animate();
+</script>
+</body>
+</html>
