@@ -3,18 +3,18 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>YodTuber</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Audiowide', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
-            background-color: #000000;
-            color: #f0f0f0;
+            background-color: #0B0B0B;
+            color: #f1f1f1;
             padding-bottom: 70px;
             overflow-x: hidden;
         }
@@ -23,110 +23,178 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: #05070eab;
-            backdrop-filter: blur(10px);
-            color: #ffffff;
+            background: #141414BF;
+            color: #00FFDB;
             padding: 10px 20px;
             z-index: 1000;
-            transition: top 0.3s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            border: 1px solid #434343;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid #303030;
+            backdrop-filter: blur(10px);
         }
 
-button[onclick="toggleSearch()"] {
+        button[onclick="toggleSearch()"] {
             position: absolute;
-            top: 0px;
-            right: 8%;
+            top: 10px;
+            right: 80px;
             padding: 10px;
             border: none;
             cursor: pointer;
-            border-radius: 13px;
-            background: #27272700;
+            background: transparent;
             color: white;
             font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
-button[onclick="toggleSidebar()"] {
-    background:#00000000;
-    border-radius: 15px ;
-    border: 1px solid #00000000;
-        }
-
-button[onclick="notifica()"] {
-            position: absolute;
-            top: 0px;
-            right: 0%;
-            padding: 2px;
+        button[onclick="toggleSidebar()"] {
+            background: transparent;
             border: none;
-            cursor: pointer;
-            border-radius: 13px;
-            background: #27272700;
-            color: white;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            padding: 10px;
         }
-        
-      button[onclick="refreshPage()"] {
+
+        button[onclick="notifica()"] {
             position: absolute;
-            top: 0px;
-            right: 0%;
+            top: 10px;
+            right: 120px;
             padding: 10px;
             border: none;
             cursor: pointer;
-            border-radius: 13px;
-            background: #27272700;
+            background: transparent;
             color: white;
             font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
-        
+
+        button[onclick="refreshPage()"] {
+            position: absolute;
+            top: 10px;
+            right: 40px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            font-size: 18px;
+        }
 
         h4 {
-            font-family: 'Audiowide', cursive;
+            font-size: 24px;
+            font-weight: 500;
+            color: #00FFFB;
+        }
+
+        /* NEW: Styling for Shorts recommendation section */
+        #shorts-recommendation {
+            margin-top: 70px;
+            padding: 20px;
+            background: #141414BF;
+            border-bottom: 1px solid #303030;
+            backdrop-filter: blur(10px);
+        }
+
+        #shorts-recommendation h5 {
             font-size: 18px;
-            border-right: 4px solid;
-            width: 10ch;
-            white-space: nowrap;
+            font-weight: 500;
+            color: #00FFDB;
+            margin-bottom: 12px;
+        }
+
+        #shorts-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #303030 #141414;
+        }
+
+        #shorts-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        #shorts-container::-webkit-scrollbar-thumb {
+            background: #303030;
+            border-radius: 3px;
+        }
+
+        #shorts-container::-webkit-scrollbar-track {
+            background: #141414;
+        }
+
+        .shorts-card {
+            flex: 0 0 160px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .shorts-card img {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .shorts-card:hover img {
+            border-radius: 0;
+            transform: scale(1.05);
+            transition: transform 0.3s ease, border-radius 0.3s ease;
+        }
+
+        .shorts-card .shorts-info {
+            padding: 8px 0;
+        }
+
+        .shorts-card .shorts-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #f1f1f1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            animation: typing 1s steps(10), blinking 1s infinite step-end alternate;
+            text-overflow: ellipsis;
         }
 
-        @keyframes typing {
-            from { width: 0; }
+        .shorts-card .channel-name {
+            font-size: 12px;
+            color: #aaaaaa;
         }
 
-        @keyframes blinking {
-            50% { border-color: transparent; }
+        /* Light mode styles for Shorts section */
+        body.light-mode #shorts-recommendation {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
         }
 
+        body.light-mode #shorts-recommendation h5 {
+            color: #0f0f0f;
+        }
 
-        #notifica {
-            position: absolute;
-            top: 7px;
-            right: 115px;
-            width: 30px;
-            height: 30px;
+        body.light-mode .shorts-card .shorts-title {
+            color: #0f0f0f;
+        }
+
+        body.light-mode .shorts-card .channel-name {
+            color: #606060;
+        }
+
+        /* Responsive design for Shorts section */
+        @media (max-width: 600px) {
+            #shorts-container {
+                gap: 8px;
+            }
+            .short Diff hunk:
+            .shorts-card {
+                flex: 0 0 140px;
+            }
         }
 
         #sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 250px;
+            width: 240px;
             height: 100%;
-            border: 1px solid #141414D1 ;
-            background: #00000042;
-            backdrop-filter: blur(18px); 
+            background: #141414BF;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             z-index: 2000;
@@ -134,6 +202,7 @@ button[onclick="notifica()"] {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            backdrop-filter: blur(10px);
         }
 
         #sidebar.open {
@@ -143,16 +212,16 @@ button[onclick="notifica()"] {
         #sidebar button {
             background: none;
             border: none;
-            color: #f0f0f0;
+            color: #f1f1f1;
             font-size: 16px;
             padding: 10px;
             text-align: left;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
         #sidebar button:hover {
-            background: #333;
+            background: #3838382E;
+            backdrop-filter: blur(90px);
         }
 
         #sidebar .close-sidebar {
@@ -168,15 +237,13 @@ button[onclick="notifica()"] {
             left: 0;
             right: 0;
             height: 60px;
-            background-color: #0000001C;
-            backdrop-filter: blur(19px);
-            border-radius: 0;
-            border: none;
+            background: #141414BF;
             display: flex;
             justify-content: space-around;
             align-items: center;
             z-index: 100;
-            border-top: 1px solid #464646;
+            border-top: 1px solid #303030;
+            backdrop-filter: blur(10px);
         }
 
         .bottom-bar button {
@@ -184,123 +251,81 @@ button[onclick="notifica()"] {
             border: none;
             cursor: pointer;
             padding: 8px;
-            border-radius: 50%;
-            transition: background 0.2s ease;
         }
 
         .bottom-bar svg {
             width: 26px;
             height: 26px;
-            fill: #f0f0f0;
+            fill: #FFFFFF;
         }
 
         #search-container {
-            margin-top: 60px;
+            margin-top: 70px;
             padding: 20px;
             text-align: center;
             display: none;
         }
 
         #search-input {
-            padding: 10px;
+            padding: 10px 20px;
             width: 80%;
-            max-width: 500px;
-            border-radius: 20px;
-            border: 1px solid #464646;
-            background: #1a1a1a;
-            color: #f0f0f0;
+            max-width: 600px;
+            border-radius: 12px;
+            border: 1px solid #303030;
+            background: #121212;
+            color: #f1f1f1;
             font-size: 16px;
         }
 
         #videos-container {
+            margin-top: 70px;
+            padding: 24px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
         }
 
         .video-card {
-            background: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.2s, opacity 0.3s, box-shadow 0.3s;
+            background: transparent;
             cursor: pointer;
-            position: relative;
-        }
-
-        .video-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-        }
-
-        .video-card:active {
-            transform: scale(0.95);
-            opacity: 0.8;
-        }
-
-        .video-card::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>') no-repeat center;
-            background-size: contain;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .video-card:hover::before {
-            opacity: 0.7;
-        }
-
-        .video-card.loading {
-            position: relative;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .video-card.loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 30px;
-            height: 30px;
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid #ff0000;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            transform: translate(-50%, -50%);
-        }
-
-        .video-card .ripple {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
         }
 
         .video-card img {
             width: 100%;
-            height: auto;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            object-fit: cover;
         }
 
-        .video-card h3 {
-            font-size: 14px;
-            padding: 10px;
-            margin: 0;
-            color: #f0f0f0;
+        .video-card:hover img {
+            border-radius: 0;
+        }
+
+        .video-card .video-info {
+            padding: 12px 0;
+        }
+
+        .video-card .video-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #f1f1f1;
+            margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .video-card .channel-name {
+            font-size: 14px;
+            color: #aaaaaa;
+            margin-bottom: 4px;
+        }
+
+        .video-card .video-meta {
+            font-size: 14px;
+            color: #aaaaaa;
         }
 
         #video-modal {
@@ -312,7 +337,6 @@ button[onclick="notifica()"] {
             height: 100%;
             background: #000;
             z-index: 2000;
-            overflow: hidden;
         }
 
         .modal-content {
@@ -327,19 +351,9 @@ button[onclick="notifica()"] {
 
         #player {
             width: 100%;
-            max-width: 100%;
+            max-width: 1280px;
             height: 100%;
-            max-height: 100vh;
-            border-radius: 0;
-            transition: opacity 0.3s;
-        }
-
-        .modal-content.is-shorts #player {
-            width: 100%;
-            max-width: 480px;
-            height: 100%;
-            max-height: 100vh;
-            aspect-ratio: 9 / 16;
+            max-height: 720px;
         }
 
         .modal-controls {
@@ -353,25 +367,11 @@ button[onclick="notifica()"] {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-
-        .modal-controls.hidden {
-            opacity: 0;
-            pointer-events: none;
         }
 
         .modal-controls h3 {
             font-size: 16px;
-            margin: 0;
-            color: #f0f0f0;
-            text-align: left;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            color: #f1f1f1;
         }
 
         .modal-controls .buttons {
@@ -386,7 +386,6 @@ button[onclick="notifica()"] {
             color: white;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
         }
 
         .modal-controls button.fullscreen {
@@ -397,91 +396,66 @@ button[onclick="notifica()"] {
             background: #ff0000;
         }
 
+        .modal-controls button.download {
+            background: #28a745;
+        }
+
         .modal-controls button.close {
             background: #464646;
         }
 
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        #loader {
+            text-align: center;
+            padding: 20px;
+            color: #aaaaaa;
+            display: none;
         }
 
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+        body.light-mode {
+            background-color: #ffffff;
+            color: #0f0f0f;
         }
-        /* Estilos para o modo claro */
-body.light-mode {
-    background-color: #ffffff;
-    color: #000000;
-}
 
-body.light-mode .header {
-    background: #C1C1C100;
-    color: #000000;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
+        body.light-mode .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+        }
 
-body.light-mode #sidebar {
-    background: #00000000;
-    border: 1px solid #717171;
-}
+        body.light-mode #sidebar {
+            background: #ffffff;
+        }
 
-body.light-mode #sidebar button {
-    color: #000000;
-}
+        body.light-mode #sidebar button {
+            color: #0f0f0f;
+        }
 
-body.light-mode #sidebar button:hover {
-    background: #C1C1C138;
-}
+        body.light-mode #sidebar button:hover {
+            background: #f0f0f0;
+        }
 
-body.light-mode .bottom-bar {
-    background: #ffffffcc;
-    border-top: 1px solid #cccccc;
-}
+        body.light-mode .bottom-bar {
+            background: #ffffff;
+            border-top: 1px solid #e5e5e5;
+        }
 
-body.light-mode .bottom-bar svg {
-    fill: #000000;
-}
+        body.light-mode .bottom-bar svg {
+            fill: #0f0f0f;
+        }
 
-body.light-mode .video-card {
-    background: #f0f0f0;
-}
+        body.light-mode .video-card .video-title {
+            color: #0f0f0f;
+        }
 
-body.light-mode .video-card h3 {
-    color: #000000;
-}
+        body.light-mode .video-card .channel-name,
+        body.light-mode .video-card .video-meta {
+            color: #606060;
+        }
 
-body.light-mode #search-input {
-    background: #f0f0f0;
-    color: #000000;
-    border: 1px solid #9A9A9A;
-}
-
-/* Ajuste para o botão de tema */
-#toggle-theme {
-    background: transparent;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 16px;
-}
-
-body.light-mode #toggle-theme svg {
-    stroke: #000000; /* Cor do ícone da lua no modo claro */
-}
-body.light-mode svg,
-body.light-mode svg path,
-body.light-mode svg circle {
-  stroke: #000000 !important;
-  stroke-width: 3px !important;
-  fill: #D8D8D800 !important;
-}
+        body.light-mode #search-input {
+            background: #f8f8f8;
+            border: 1px solid #d3d3d3;
+            color: #0f0f0f;
+        }
     </style>
 </head>
 <body>
@@ -493,11 +467,11 @@ body.light-mode svg circle {
                 <line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
         </button>
-        <h4>Yod Tube teste</h4>
+        <h4>YodTuber</h4>
         <div>
-            <button id="notifica" onclick="notifica()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff" viewBox="0 0 24 24">
-                    <path d="M12 22c1.1 0 1.99-.9 1.99-2h-4A2 2 0 0012 22zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 10-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+            <button onclick="notifica()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
                 </svg>
             </button>
             <button onclick="refreshPage()" title="Atualizar">
@@ -512,47 +486,52 @@ body.light-mode svg circle {
             </button>
         </div>
     </header>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Pesquisar vídeos..." onkeypress="if(event.key === 'Enter') pesquisa()">
+    </div>
+ 
+    <!-- NEW: Shorts recommendation section -->
+    <div id="shorts-recommendation">
+        <h5>Recomendações de Shorts</h5>
+        <div id="shorts-container"></div>
+    </div>
 
     <div id="sidebar">
         <button onclick="navigate('home'); toggleSidebar()">Home</button>
         <button onclick="navigate('shots'); toggleSidebar()">Shots</button>
         <button onclick="navigate('inscricoes'); toggleSidebar()">Inscrições</button>
-<button id="toggle-theme">
-    <svg id="theme-icon" width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"></svg>
-    Claro/Escuro
-</button>
+        <button id="toggle-theme">
+            <svg id="theme-icon" width="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"></svg>
+            Claro/Escuro
+        </button>
         <button onclick="navigate('perfil'); toggleSidebar()">Perfil</button>
         <button class="close-sidebar" onclick="toggleSidebar()">Fechar</button>
     </div>
 
-    <div id="search-container">
-        <input type="text" id="search-input" placeholder="Pesquisar vídeos..." onkeypress="if(event.key === 'Enter') pesquisa()">
-    </div>
-
     <div id="videos-container"></div>
+    <div id="loader">Carregando mais vídeos...</div>
 
     <div class="bottom-bar">
         <button onclick="navigate('home')" title="Início">
-            <svg width="24" height="24" fill="#f0f0f0" viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v11a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+            <svg width="24" height="24" fill="#f1f1f1" viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v11a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
         </button>
         <button onclick="navigate('shots')" title="Shots">
-            <svg width="24" height="24" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M352.8 127.4L212.3 90.9c-27.1-7.5-53.1 13.7-53.1 42v56.2c0 6.5-3.6 12.4-9.3 15.5l-36.4 19.4c-25.4 13.6-25.4 50.1 0 63.7l36.4 19.4c5.7 3 9.3 9 9.3 15.5v56.2c0 28.3 26 49.5 53.1 42l140.5-36.5c24.5-6.4 39.4-31.6 33-56.1l-12.3-47.7c-1.8-7.1 1-14.5 7-18.7l23.3-16.4c21.3-15 21.3-45.5 0-60.5l-23.3-16.4c-6-4.2-8.8-11.6-7-18.7l12.3-47.7c6.4-24.5-8.5-49.7-33-56.1z" stroke="#f0f0f0" stroke-width="30" fill="none" />
-                <polygon points="220,190 320,256 220,322" fill="#f0f0f0" />
+            <svg width="24" height="24" viewBox="0 0 512 512" fill="none">
+                <path d="M352.8 127.4L212.3 90.9c-27.1-7.5-53.1 13.7-53.1 42v56.2c0 6.5-3.6 12.4-9.3 15.5l-36.4 19.4c-25.4 13.6-25.4 50.1 0 63.7l36.4 19.4c5.7 3 9.3 9 9.3 15.5v56.2c0 28.3 26 49.5 53.1 42l140.5-36.5c24.5-6.4 39.4-31.6 33-56.1l-12.3-47.7c-1.8-7.1 1-14.5 7-18.7l23.3-16.4c21.3-15 21.3-45.5 0-60.5l-23.3-16.4c-6-4.2- personally-11.6-7-18.7l12.3-47.7c6.4-24.5-8.5-49.7-33-56.1z" stroke="#f1f1f1" stroke-width="30" fill="none" />
+                <polygon points="220,190 320,256 220,322" fill="#f1f1f1" />
             </svg>
         </button>
         <button onclick="navigate('inscricoes')" title="Inscrições">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f0f0f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f1f1f1" stroke-width="2">
                 <rect x="3" y="4" width="18" height="14" rx="2" ry="2" fill="none"/>
-                <path d="M10 9l5 3-5 3V9z" fill="#f0f0f0"/>
+                <path d="M10 9l5 3-5 3V9z" fill="#f1f1f1"/>
             </svg>
         </button>
         <button onclick="navigate('perfil')" title="Perfil">
-            <svg width="24" height="24" fill="#f0f0f0" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="#f0f0f0" stroke-width="2"/></svg>
+            <svg width="24" height="24" fill="#f1f1f1" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="#f1f1f1" stroke-width="2"/></svg>
         </button>
     </div>
 
-    <!-- Modal para o Player -->
     <div id="video-modal">
         <div class="modal-content">
             <div id="player"></div>
@@ -561,399 +540,531 @@ body.light-mode svg circle {
                 <div class="buttons">
                     <button class="fullscreen" onclick="toggleFullscreen()">Tela Cheia</button>
                     <button class="youtube" onclick="openYouTube()">YouTube</button>
+                    <button class="download" onclick="downloadVideo()">Download</button>
                     <button class="close" onclick="closeModal()">Fechar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Carregar APIs do Google -->
-    <script src="https://apis.google.com/js/api.js"></script>
-    <!-- Carregar YouTube IFrame Player API -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    const API_KEY = 'AIzaSyDWvYujjZBF6CKYaOR3_5kp4htROEy6bks';
+    const CLIENT_ID = '617601575320-n10sf0jp76glv1hf1ablt2t5povro6l7.apps.googleusercontent.com';
+    const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'];
+    const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
+    const BACKEND_URL = 'http://localhost:3000';
 
-    <script>
-        const API_KEY = 'AIzaSyDWvYujjZBF6CKYaOR3_5kp4htROEy6bks';
-        const CLIENT_ID = '617601575320-n10sf0jp76glv1hf1ablt2t5povro6l7.apps.googleusercontent.com';
-        const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'];
-        const SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
+    let tokenClient;
+    let player;
+    let currentVideoId;
+    let isShorts = false;
+    let shortsList = [];
+    let currentShortIndex = 0;
+    let controlsTimeout;
+    let currentPage = 'home';
+    let nextPageToken = '';
+    let isLoading = false;
 
-        let tokenClient;
-        let player;
-        let currentVideoId;
-        let isShorts = false;
-        let shortsList = [];
-        let currentShortIndex = 0;
-        let controlsTimeout;
-        let currentPage = 'home';
-
-        function initApiClient() {
-            gapi.load('client', () => {
-                gapi.client.init({
-                    apiKey: API_KEY,
-                    discoveryDocs: DISCOVERY_DOCS
-                }).then(() => {
-                    loadPopularVideos();
-                }).catch(error => {
-                    console.error('Erro ao inicializar a API:', error);
-                    alert('Erro ao conectar com a API do YouTube.');
-                });
+    function initApiClient() {
+        gapi.load('client', () => {
+            gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: DISCOVERY_DOCS
+            }).then(() => {
+                loadPopularVideos();
+                setupInfiniteScroll();
+            }).catch(error => {
+                console.error('Erro ao inicializar a API:', error);
+                alert('Erro ao conectar com a API do YouTube.');
             });
-        }
+        });
+    }
 
-        function exibirBotaoLogin() {
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID,
-                scope: SCOPES,
-                callback: (tokenResponse) => {
-                    if (tokenResponse && tokenResponse.access_token) {
-                        gapi.client.setToken(tokenResponse);
-                        loadSubscriptions();
-                    }
+    function exibirBotaoLogin() {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: (tokenResponse) => {
+                if (tokenResponse && tokenResponse.access_token) {
+                    gapi.client.setToken(tokenResponse);
+                    loadSubscriptions();
                 }
-            });
+            }
+        });
 
-            const loginBtn = document.createElement('button');
-            loginBtn.innerText = 'Login com Google';
-            loginBtn.onclick = () => tokenClient.requestAccessToken();
-            document.getElementById('auth-container')?.appendChild(loginBtn);
-        }
+        const loginBtn = document.createElement('button');
+        loginBtn.innerText = 'Login com Google';
+        loginBtn.onclick = () => tokenClient.requestAccessToken();
+        document.getElementById('auth-container')?.appendChild(loginBtn);
+    }
 
-        function loadPopularVideos() {
-            isShorts = false;
-            currentPage = 'home';
-            const regions = ['US', 'BR', 'IN', 'GB', 'CA'];
-            const randomRegion = regions[Math.floor(Math.random() * regions.length)];
+    function loadPopularVideos(pageToken = '') {
+        if (isLoading) return;
+        isLoading = true;
+        document.getElementById('loader').style.display = 'block';
+        isShorts = false;
+        currentPage = 'home';
+        const regions = ['US', 'BR', 'GB', 'CA'];
+        const randomRegion = regions[Math.floor(Math.random() * regions.length)];
+        gapi.client.youtube.videos.list({
+            part: 'snippet,contentDetails,statistics',
+            chart: 'mostPopular',
+            maxResults: 24,
+            regionCode: randomRegion,
+            pageToken: pageToken
+        }).then(response => {
+            displayVideos(response.result.items, pageToken === '');
+            nextPageToken = response.result.nextPageToken || '';
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
+            if (!nextPageToken) {
+                document.getElementById('loader').innerHTML = '<p>Não há mais vídeos para carregar.</p>';
+            }
+            // NEW: Load recommended Shorts only on the first page
+            if (pageToken === '') {
+                loadRecommendedShorts();
+            }
+        }).catch(error => {
+            console.error('Erro ao carregar vídeos:', error);
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
+            alert('Erro ao carregar vídeos populares.');
+        });
+    }
+
+    function loadSubscriptions() {
+        isShorts = false;
+        currentPage = 'inscricoes';
+        gapi.client.youtube.subscriptions.list({
+            part: 'snippet',
+            mine: true,
+            maxResults: 120
+        }).then(response => {
+            const channelIds = response.result.items.map(item => item.snippet.resourceId.channelId).join(',');
+            loadChannelVideos(channelIds);
+        }).catch(error => {
+            console.error('Erro ao carregar inscrições:', error);
+            alert('Erro ao carregar inscrições.');
+        });
+    }
+
+    function loadChannelVideos(channelId, pageToken = '') {
+        gapi.client.youtube.search.list({
+            part: 'snippet',
+            channelId: channelId,
+            maxResults: 450,
+            order: 'date',
+            pageToken: pageToken
+        }).then(response => {
+            displayVideos(response.result.items, pageToken === '');
+            nextPageToken = response.result.nextPageToken || '';
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
+            if (!nextPageToken) {
+                document.getElementById('loader').innerHTML = '<p>Não há mais vídeos para carregar.</p>';
+            }
+        }).catch(error => {
+            console.error('Erro ao carregar vídeos do canal:', error);
+            alert('Erro ao carregar vídeos do canal.');
+        });
+    }
+
+    function loadShorts() {
+        isShorts = true;
+        currentPage = 'shots';
+        const categories = ['', 'gaming', 'funny', 'dance', 'music'];
+        const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+        const query = `#shorts ${randomCategory}`.trim();
+        gapi.client.youtube.search.list({
+            part: 'snippet',
+            q: query,
+            maxResults: 90,
+            type: 'video',
+            videoDuration: 'short'
+        }).then(response => {
+            const videoIds = response.result.items.map(item => item.id.videoId).join(',');
             gapi.client.youtube.videos.list({
                 part: 'snippet,contentDetails',
-                chart: 'mostPopular',
-                maxResults: 12,
-                regionCode: randomRegion
-            }).then(response => {
-                displayVideos(response.result.items);
-            }).catch(error => {
-                console.error('Erro ao carregar vídeos:', error);
-            });
-        }
-
-        function loadSubscriptions() {
-            isShorts = false;
-            currentPage = 'inscricoes';
-            gapi.client.youtube.subscriptions.list({
-                part: 'snippet',
-                mine: true,
-                maxResults: 12
-            }).then(response => {
-                const channelIds = response.result.items.map(item => item.snippet.resourceId.channelId).join(',');
-                loadChannelVideos(channelIds);
-            }).catch(error => {
-                console.error('Erro ao carregar inscrições:', error);
-            });
-        }
-
-        function loadChannelVideos(channelId) {
-            gapi.client.youtube.search.list({
-                part: 'snippet',
-                channelId: channelId,
-                maxResults: 12,
-                order: 'date'
-            }).then(response => {
-                displayVideos(response.result.items);
-            }).catch(error => {
-                console.error('Erro ao carregar vídeos do canal:', error);
-            });
-        }
-
-        function loadShorts() {
-            isShorts = true;
-            currentPage = 'shots';
-            const categories = ['', 'gaming', 'funny', 'dance', 'music'];
-            const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-            const query = `#shorts ${randomCategory}`.trim();
-            gapi.client.youtube.search.list({
-                part: 'snippet',
-                q: query,
-                maxResults: 50,
-                type: 'video',
-                videoDuration: 'short'
-            }).then(response => {
-                const videoIds = response.result.items.map(item => item.id.videoId).join(',');
-                gapi.client.youtube.videos.list({
-                    part: 'snippet,contentDetails',
-                    id: videoIds
-                }).then(detailsResponse => {
-                    shortsList = detailsResponse.result.items.filter(video => {
-                        const duration = parseISO8601Duration(video.contentDetails.duration);
-                        return duration <= 60;
-                    });
-                    if (shortsList.length > 0) {
-                        currentShortIndex = 0;
-                        showVideoModal(shortsList[0].id, shortsList[0].snippet.title);
-                    } else {
-                        alert('Nenhum Short encontrado.');
-                    }
-                }).catch(error => {
-                    console.error('Erro ao carregar detalhes dos Shorts:', error);
+                id: videoIds
+            }).then(detailsResponse => {
+                shortsList = detailsResponse.result.items.filter(video => {
+                    const duration = parseISO8601Duration(video.contentDetails.duration);
+                    return duration <= 60;
                 });
-            }).catch(error => {
-                console.error('Erro ao carregar Shorts:', error);
-            });
-        }
-
-        function parseISO8601Duration(duration) {
-            const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-            const hours = parseInt(match[1]) || 0;
-            const minutes = parseInt(match[2]) || 0;
-            const seconds = parseInt(match[3]) || 0;
-            return hours * 3600 + minutes * 60 + seconds;
-        }
-
-        function refreshPage() {
-            closeModal();
-            if (currentPage === 'home') {
-                loadPopularVideos();
-            } else if (currentPage === 'shots') {
-                loadShorts();
-            } else if (currentPage === 'inscricoes') {
-                loadSubscriptions();
-            } else if (currentPage === 'perfil') {
-                navigate('perfil');
-            }
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
-        }
-
-        function pesquisa() {
-            isShorts = false;
-            currentPage = 'search';
-            const query = document.getElementById('search-input').value;
-            if (!query) return;
-            gapi.client.youtube.search.list({
-                part: 'snippet',
-                q: query,
-                maxResults: 12,
-                type: 'video'
-            }).then(response => {
-                displayVideos(response.result.items);
-            }).catch(error => {
-                console.error('Erro na pesquisa:', error);
-            });
-        }
-
-        function toggleSearch() {
-            const searchContainer = document.getElementById('search-container');
-            searchContainer.style.display = searchContainer.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function notifica() {
-            alert('Notificações ainda não implementadas!');
-        }
-
-        function displayVideos(videos) {
-            const videosContainer = document.getElementById('videos-container');
-            videosContainer.innerHTML = '';
-            videos.forEach(video => {
-                const videoId = video.id.videoId || video.id;
-                const title = video.snippet.title;
-                const thumbnail = video.snippet.thumbnails.medium.url;
-                const videoCard = document.createElement('div');
-                videoCard.className = 'video-card';
-                videoCard.innerHTML = `
-                    <img src="${thumbnail}" alt="${title}">
-                    <h3>${title}</h3>
-                `;
-                videoCard.onclick = (e) => {
-                    const ripple = document.createElement('span');
-                    ripple.classList.add('ripple');
-                    const rect = videoCard.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    ripple.style.width = ripple.style.height = `${size}px`;
-                    ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
-                    ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
-                    videoCard.appendChild(ripple);
-
-                    videoCard.classList.add('loading');
-                    setTimeout(() => {
-                        showVideoModal(videoId, title);
-                        videoCard.classList.remove('loading');
-                        ripple.remove();
-                    }, 500);
-                };
-                videosContainer.appendChild(videoCard);
-            });
-        }
-
-        function showVideoModal(videoId, title) {
-            currentVideoId = videoId;
-            document.getElementById('modal-title').innerText = title;
-            const modalContent = document.querySelector('.modal-content');
-            modalContent.classList.toggle('is-shorts', isShorts);
-            document.getElementById('video-modal').style.display = 'flex';
-
-            if (player) {
-                player.destroy();
-            }
-            document.getElementById('player').style.opacity = '0';
-            player = new YT.Player('player', {
-                height: '100%',
-                width: '100%',
-                videoId: videoId,
-                playerVars: {
-                    autoplay: 1,
-                    controls: 1,
-                    rel: 0,
-                    showinfo: 0,
-                    fs: 1
-                },
-                events: {
-                    onReady: (event) => {
-                        event.target.playVideo();
-                        document.getElementById('player').style.opacity = '1';
-                        showControls();
-                    },
-                    onError: (error) => {
-                        console.error('Erro no player:', error);
-                        alert('Erro ao carregar o vídeo.');
-                    }
+                if (shortsList.length > 0) {
+                    currentShortIndex = 0;
+                    showVideoModal(shortsList[0].id, shortsList[0].snippet.title);
+                } else {
+                    alert('Nenhum Short encontrado.');
                 }
+            }).catch(error => {
+                console.error('Erro ao carregar detalhes dos Shorts:', error);
+                alert('Erro ao carregar Shorts.');
             });
+        }).catch(error => {
+            console.error('Erro ao carregar Shorts:', error);
+            alert('Erro ao carregar Shorts.');
+        });
+    }
 
-            if (isShorts) {
-                setupSwipeEvents();
+    // NEW: Function to load recommended Shorts
+    function loadRecommendedShorts() {
+        const query = '#shorts';
+        gapi.client.youtube.search.list({
+            part: 'snippet',
+            q: query,
+            maxResults: 470,
+            type: 'video',
+            videoDuration: 'short'
+        }).then(response => {
+            const videoIds = response.result.items.map(item => item.id.videoId).join(',');
+            gapi.client.youtube.videos.list({
+                part: 'snippet,contentDetails',
+                id: videoIds
+            }).then(detailsResponse => {
+                const shorts = detailsResponse.result.items.filter(video => {
+                    const duration = parseISO8601Duration(video.contentDetails.duration);
+                    return duration <= 60;
+                });
+                displayShorts(shorts);
+            }).catch(error => {
+                console.error('Erro ao carregar Shorts recomendados:', error);
+            });
+        }).catch(error => {
+            console.error('Erro na busca de Shorts:', error);
+        });
+    }
+
+    // NEW: Function to display Shorts in the recommendation section
+    function displayShorts(shorts) {
+        const shortsContainer = document.getElementById('shorts-container');
+        shortsContainer.innerHTML = '';
+        shorts.forEach(short => {
+            const videoId = short.id;
+            const title = short.snippet.title;
+            const thumbnail = short.snippet.thumbnails.high.url;
+            const channelTitle = short.snippet.channelTitle;
+            const shortsCard = document.createElement('div');
+            shortsCard.className = 'shorts-card';
+            shortsCard.innerHTML = `
+                <img src="${thumbnail}" alt="${title}">
+                <div class="shorts-info">
+                    <div class="shorts-title">${title}</div>
+                    <div class="channel-name">${channelTitle}</div>
+                </div>
+            `;
+            shortsCard.onclick = () => {
+                showVideoModal(videoId, title);
+            };
+            shortsContainer.appendChild(shortsCard);
+        });
+    }
+
+    function parseISO8601Duration(duration) {
+        const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+        const hours = parseInt(match[1]) || 0;
+        const minutes = parseInt(match[2]) || 0;
+        const seconds = parseInt(match[3]) || 0;
+        return hours * 3600 + minutes * 60 + seconds;
+    }
+
+    function refreshPage() {
+        closeModal();
+        nextPageToken = '';
+        if (currentPage === 'home') {
+            loadPopularVideos();
+        } else if (currentPage === 'shots') {
+            loadShorts();
+        } else if (currentPage === 'inscricoes') {
+            loadSubscriptions();
+        } else if (currentPage === 'perfil') {
+            navigate('perfil');
+        }
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+    }
+
+    function pesquisa(pageToken = '') {
+        if (isLoading) return;
+        isLoading = true;
+        document.getElementById('loader').style.display = 'block';
+        isShorts = false;
+        currentPage = 'search';
+        const query = document.getElementById('search-input').value;
+        if (!query) {
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
+            return;
+        }
+        gapi.client.youtube.search.list({
+            part: 'snippet',
+            q: query,
+            maxResults: 9000,
+            type: 'video',
+            pageToken: pageToken
+        }).then(response => {
+            displayVideos(response.result.items, pageToken === ''); // FIXED: Changed from displayVitamin
+            nextPageToken = response.result.nextPageToken || '';
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
+            if (!nextPageToken) {
+                document.getElementById('loader').innerHTML = '<p>Não há mais vídeos para carregar.</p>';
             }
+        }).catch(error => {
+            console.error('Erro na pesquisa:', error);
+            isLoading = false;
+            document.getElementById('loader').style.display = 'none';
+            alert('Erro ao realizar a pesquisa.');
+        });
+    }
+
+    function toggleSearch() {
+        const searchContainer = document.getElementById('search-container');
+        searchContainer.style.display = searchContainer.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function notifica() {
+        alert('Notificações ainda não implementadas!');
+    }
+
+    function displayVideos(videos, clear = false) {
+        const videosContainer = document.getElementById('videos-container');
+        if (clear) videosContainer.innerHTML = '';
+        videos.forEach(video => {
+            const videoId = video.id.videoId || video.id;
+            const title = video.snippet.title;
+            const thumbnail = video.snippet.thumbnails.high.url;
+            const channelTitle = video.snippet.channelTitle;
+            const publishedAt = new Date(video.snippet.publishedAt).toLocaleDateString();
+            const viewCount = video.statistics ? formatViewCount(video.statistics.viewCount) : 'N/A';
+            const videoCard = document.createElement('div');
+            videoCard.className = 'video-card';
+            videoCard.innerHTML = `
+                <img src="${thumbnail}" alt="${title}">
+                <div class="video-info">
+                    <div class="video-title">${title}</div>
+                    <div class="channel-name">${channelTitle}</div>
+                    <div class="video-meta">${viewCount} visualizações • ${publishedAt}</div>
+                </div>
+            `;
+            videoCard.onclick = () => {
+                showVideoModal(videoId, title);
+            };
+            videosContainer.appendChild(videoCard);
+        });
+    }
+
+    function formatViewCount(views) {
+        if (!views) return 'N/A';
+        if (views >= 1_000_000) return (views / 1_000_000).toFixed(1) + 'M';
+        if (views >= 1_000) return (views / 1_000).toFixed(1) + 'K';
+        return views;
+    }
+
+    function setupInfiniteScroll() {
+        const loader = document.getElementById('loader');
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && nextPageToken && !isLoading) {
+                console.log('Carregando mais vídeos... Page:', currentPage, 'NextPageToken:', nextPageToken);
+                if (currentPage === 'home') {
+                    loadPopularVideos(nextPageToken);
+                } else if (currentPage === 'search') {
+                    pesquisa(nextPageToken);
+                } else if (currentPage === 'inscricoes') {
+                    loadChannelVideos(null, nextPageToken);
+                }
+            }
+        }, { threshold: 0.5 });
+        observer.observe(loader);
+    }
+
+    function showVideoModal(videoId, title) {
+        currentVideoId = videoId;
+        document.getElementById('modal-title').innerText = title;
+        const modalContent = document.querySelector('.modal-content');
+        modalContent.classList.toggle('is-shorts', isShorts);
+        document.getElementById('video-modal').style.display = 'flex';
+
+        if (player) {
+            player.destroy();
         }
-
-        function showControls() {
-            const controls = document.querySelector('.modal-controls');
-            controls.classList.remove('hidden');
-            clearTimeout(controlsTimeout);
-            controlsTimeout = setTimeout(() => {
-                controls.classList.add('hidden');
-            }, 3000);
-        }
-
-        function setupSwipeEvents() {
-            const modal = document.getElementById('video-modal');
-            let touchStartY = 0;
-            let touchEndY = 0;
-
-            modal.addEventListener('touchstart', (e) => {
-                touchStartY = e.touches[0].clientY;
-                showControls();
-            });
-
-            modal.addEventListener('touchend', (e) => {
-                touchEndY = e.changedTouches[0].clientY;
-                const deltaY = touchStartY - touchEndY;
-                if (Math.abs(deltaY) > 50) {
-                    if (deltaY > 0 && currentShortIndex < shortsList.length - 1) {
+        document.getElementById('player').style.opacity = '0';
+        player = new YT.Player('player', {
+            height: '100%',
+            width: '100%',
+            videoId: videoId,
+            playerVars: {
+                autoplay: 1,
+                controls: 1,
+                rel: 0,
+                showinfo: 0,
+                fs: 1
+            },
+            events: {
+                onReady: (event) => {
+                    event.target.playVideo();
+                    document.getElementById('player').style.opacity = '1';
+                    showControls();
+                },
+                onStateChange: (event) => {
+                    if (event.data === YT.PlayerState.ENDED && isShorts && currentShortIndex < shortsList.length - 1) {
                         currentShortIndex++;
                         showVideoModal(shortsList[currentShortIndex].id, shortsList[currentShortIndex].snippet.title);
-                    } else if (deltaY < 0 && currentShortIndex > 0) {
-                        currentShortIndex--;
-                        showVideoModal(shortsList[currentShortIndex].id, shortsList[currentShortIndex].snippet.title);
                     }
+                },
+                onError: (error) => {
+                    console.error('Erro no player:', error);
+                    alert('Erro ao carregar o vídeo.');
                 }
+            }
+        });
+
+        if (isShorts) {
+            setupSwipeEvents();
+        }
+    }
+
+    function showControls() {
+        const controls = document.querySelector('.modal-controls');
+        controls.classList.remove('hidden');
+        clearTimeout(controlsTimeout);
+        controlsTimeout = setTimeout(() => {
+            controls.classList.add('hidden');
+        }, 3000);
+    }
+
+    function setupSwipeEvents() {
+        const modal = document.getElementById('video-modal');
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        modal.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            showControls();
+        });
+
+        modal.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].clientY;
+            const deltaY = touchStartY - touchEndY;
+            if (Math.abs(deltaY) > 50) {
+                if (deltaY > 0 && currentShortIndex < shortsList.length - 1) {
+                    currentShortIndex++;
+                    showVideoModal(shortsList[currentShortIndex].id, shortsList[currentShortIndex].snippet.title);
+                } else if (deltaY < 0 && currentShortIndex > 0) {
+                    currentShortIndex--;
+                    showVideoModal(shortsList[currentShortIndex].id, shortsList[currentShortIndex].snippet.title);
+                }
+            }
+        });
+
+        modal.addEventListener('click', showControls);
+    }
+
+    function toggleFullscreen() {
+        const playerContainer = document.getElementById('player');
+        if (!document.fullscreenElement) {
+            playerContainer.requestFullscreen().catch(err => {
+                console.error('Erro ao entrar em tela cheia:', err);
             });
-
-            modal.addEventListener('click', showControls);
+        } else {
+            document.exitFullscreen();
         }
+    }
 
-        function toggleFullscreen() {
-            const playerContainer = document.getElementById('player');
-            if (!document.fullscreenElement) {
-                playerContainer.requestFullscreen().catch(err => {
-                    console.error('Erro ao entrar em tela cheia:', err);
-                });
-            } else {
-                document.exitFullscreen();
-            }
+    function openYouTube() {
+        window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
+        closeModal();
+    }
+
+    function downloadVideo() {
+        const downloadUrl = `${BACKEND_URL}/download?videoId=${currentVideoId}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        alert('Download iniciado! Certifique-se de que você tem permissão para baixar este vídeo.');
+    }
+
+    function closeModal() {
+        document.getElementById('video-modal').style.display = 'none';
+        if (player) {
+            player.destroy();
+            player = null;
         }
+        shortsList = [];
+        currentShortIndex = 0;
+        isShorts = false;
+    }
 
-        function openYouTube() {
-            window.open(`https://www.youtube.com/watch?v=${currentVideoId}`, '_blank');
-            closeModal();
+    function navigate(page) {
+        closeModal();
+        nextPageToken = '';
+        currentPage = page;
+        if (page === 'home') {
+            loadPopularVideos();
+        } else if (page === 'inscricoes') {
+            tokenClient.requestAccessToken();
+        } else if (page === 'shots') {
+            loadShorts();
+        } else if (page === 'perfil') {
+            alert('Página de perfil ainda não implementada!');
         }
+    }
 
-        function closeModal() {
-            document.getElementById('video-modal').style.display = 'none';
-            if (player) {
-                player.destroy();
-                player = null;
-            }
-            shortsList = [];
-            currentShortIndex = 0;
-            isShorts = false;
-        }
+    window.onload = function() {
+        initApiClient();
 
-        function navigate(page) {
-            closeModal();
-            currentPage = page;
-            if (page === 'home') {
-                loadPopularVideos();
-            } else if (page === 'inscricoes') {
-                tokenClient.requestAccessToken();
-            } else if (page === 'shots') {
-                loadShorts();
-            } else if (page === 'perfil') {
-                alert('Página de perfil ainda não implementada!');
-            }
-        }
-
-        window.onload = function() {
-            initApiClient();
-
-            const gsiScript = document.createElement('script');
-            gsiScript.src = 'https://accounts.google.com/gsi/client';
-            gsiScript.onload = () => {
-                exibirBotaoLogin();
-            };
-            document.head.appendChild(gsiScript);
+        const gsiScript = document.createElement('script');
+        gsiScript.src = 'https://accounts.google.com/gsi/client';
+        gsiScript.onload = () => {
+            exibirBotaoLogin();
         };
-        const toggleTheme = document.getElementById("toggle-theme");
-const icon = document.getElementById("theme-icon");
+        document.head.appendChild(gsiScript);
+    };
 
-// Ícone do sol (para modo escuro, alterna para claro)
-const sunIcon = `
-  <svg viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="5"/>
-    <line x1="12" y1="1" x2="12" y2="3"/>
-    <line x1="12" y1="21" x2="12" y2="23"/>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-    <line x1="1" y1="12" x2="3" y2="12"/>
-    <line x1="21" y1="12" x2="23" y2="12"/>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-  </svg>
-`;
+    const toggleTheme = document.getElementById("toggle-theme");
+    const icon = document.getElementById("theme-icon");
 
-// Ícone da lua (para modo claro, alterna para escuro)
-const moonIcon = `
-  <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-  </svg>
-`;
+    const sunIcon = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+    `;
 
-// Verifica o tema salvo no localStorage (opcional)
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme === "light") {
-  document.body.classList.add("light-mode");
-  icon.innerHTML = moonIcon;
-} else {
-  icon.innerHTML = sunIcon;
-}
+    const moonIcon = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+    `;
 
-// Alterna o tema ao clicar
-toggleTheme.addEventListener("click", () => {
-  const isLight = document.body.classList.toggle("light-mode");
-  icon.innerHTML = isLight ? moonIcon : sunIcon;
-  // Salva a preferência no localStorage (opcional)
-  localStorage.setItem("theme", isLight ? "light" : "dark");
-}); 
-    </script>
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        icon.innerHTML = moonIcon;
+    } else {
+        icon.innerHTML = sunIcon;
+    }
+
+    toggleTheme.addEventListener("click", () => {
+        const isLight = document.body.classList.toggle("light-mode");
+        icon.innerHTML = isLight ? moonIcon : sunIcon;
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+    });
+</script>
 </body>
-</html> 
+                                                                                                                                                     </html> 
