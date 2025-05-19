@@ -1,814 +1,596 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro e Internet</title>
+<html class="h-full bg-gray-900 text-white" lang="pt-BR">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Cat Wodre - Editor de Código Python
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
   <style>
-    :root {
-      --primary-color: #6B00D7;
-      --bg-dark: #1A1A1A;
-      --card-bg: linear-gradient(135deg, #2A0040, #0A0A0A);
-      --input-bg: #2C2C2C;
-      --text-light: #E0E0E0;
-      --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --accent-color: #FF2E63;
-      --gradient: linear-gradient(135deg, #3B82F6, #9333EA);
-    }
-
-    * {
-      box-sizing: border-box;
+   body,
+    html {
+      height: 100%;
       margin: 0;
-      padding: 0;
+      font-family: 'Fira Code', monospace;
+      background-color: #000000;
+      color: #d1d5db;
     }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-light);
-      line-height: 1.7;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 2rem auto;
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: var(--shadow);
-      animation: fadeIn 0.6s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 {
-      text-align: center;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 1.5rem;
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.025em;
-    }
-
-    .highlight {
-      color: var(--accent-color);
-      font-weight: 700;
-    }
-
-    label {
-      margin-top: 1rem;
-      display: block;
-      font-weight: 500;
-      font-size: 0.95rem;
-      color: #B0B0B0;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 0.875rem;
-      border-radius: 0.75rem;
-      border: 1px solid #4B0082;
-      margin-top: 0.5rem;
-      background: var(--input-bg);
-      color: var(--text-light);
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 10px rgba(107, 0, 215, 0.2);
-    }
-
-    button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.875rem;
-      border-radius: 0.75rem;
-      background: var(--gradient);
-      color: #FFF;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: var(--transition);
+    .editor-container {
       position: relative;
-      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: row;
     }
-
-    button::before {
-      content: '';
+    .editor {
+      scrollbar-width: thin;
+      scrollbar-color: #334155 #1e293b;
+    }
+    .editor::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .editor::-webkit-scrollbar-thumb {
+      background-color: #334155;
+      border-radius: 4px;
+    }
+    .editor::-webkit-scrollbar-track {
+      background-color: #1e293b;
+    }
+    .line-numbers {
+      user-select: none;
+      text-align: right;
+      padding-right: 12px;
+      color: #64748b;
+      font-size: 0.875rem;
+      line-height: 1.5rem;
+      font-family: 'Fira Code', monospace;
+      background-color: #1e293b;
+      white-space: pre;
+      overflow: hidden;
+      min-width: 2.5rem;
+    }
+    #editor {
       position: absolute;
       top: 0;
-      left: -100%;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: 0.5s;
+      z-index: 10;
+      background: transparent;
+      color: transparent;
+      caret-color: #000000;
+      resize: none;
     }
-
-    button:hover::before {
-      left: 100%;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(107, 0, 215, 0.3);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .nav-menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 0.75rem;
-      justify-content: center;
-      margin-bottom: 1.5rem;
+    #editor-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1e293b;
+      color: #e5e7eb;
+      font-size: 0.875rem;
+      line-height: 1.5rem;
       padding: 1rem;
-      border-radius: 1rem;
-      background: rgba(255, 255, 255, 0.05);
+      pointer-events: none;
+      white-space: pre-wrap;
+      overflow: auto;
+      z-index: 5;
+      font-family: 'Fira Code', monospace;
     }
-
-    .nav-menu button {
-      flex: 1;
-      min-width: 100px;
+    .editor:focus,
+    #editor-overlay:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #000000;
+    }
+    .terminal {
+      scrollbar-width: thin;
+      scrollbar-color: #334155 #1e293b;
+    }
+    .terminal::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .terminal::-webkit-scrollbar-thumb {
+      background-color: #334155;
+      border-radius: 4px;
+    }
+    .terminal::-webkit-scrollbar-track {
+      background-color: #1e293b;
+    }
+    .terminal {
+      background-color: #1e293b;
+      color: #d1d5db;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.875rem;
+      line-height: 1.5rem;
       padding: 1rem;
-      background: var(--input-bg);
-      color: var(--text-light);
-      font-size: 0.9rem;
+      border-radius: 0.375rem;
+      overflow-y: auto;
+      max-height: 250px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #334155;
+    }
+    .terminal:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    .btn-primary {
+      background-color: #000000A6;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 0.5rem;
-      height: 100px;
-      border-radius: 0.75rem;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      font-size: 0.885rem;
+      width: 56px;
     }
-
-    .nav-menu button svg {
-      width: 2.5rem;
-      height: 2.5rem;
+    .btn-primary:hover {
+      background-color: #000000A1;
+      transform: translateY(-1px);
+      color: #00FF31D9;
     }
-
-    .nav-menu button:hover {
-      background: var(--primary-color);
-      color: #FFF;
-      transform: translateY(-3px);
+    .btn-primary:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #4F4F4F;
     }
-
-    .plan {
-      background: var(--input-bg);
-      padding: 1.5rem;
-      border-radius: 1rem;
-      margin-top: 1rem;
-      transition: var(--transition);
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .plan:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow);
-      border-color: var(--primary-color);
-    }
-
-    .plan .popular {
-      position: absolute;
-      top: -0.75rem;
-      right: 0.75rem;
-      background: var(--accent-color);
-      color: #FFF;
-      padding: 0.375rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .urgency {
-      text-align: center;
-      color: var(--accent-color);
-      font-size: 0.9rem;
-      margin: 0.75rem 0;
-      font-weight: 500;
-    }
-
-    .social-proof {
-      text-align: center;
-      margin: 1.5rem 0;
-      font-size: 0.9rem;
-      color: #A0A0A0;
-    }
-
-    .testimonials {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-light);
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin: 1.5rem 0;
-      font-size: 0.9rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .testimonials p {
-      margin: 0.75rem 0;
-      font-style: italic;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .qr {
-      text-align: center;
-      margin-top: 1.5rem;
-      animation: fadeIn 0.5s ease;
-    }
-
-    .qr img {
-      max-width: 200px;
-      border-radius: 0.5rem;
-      border: 2px solid var(--primary-color);
-    }
-
-    .loading {
-      text-align: center;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 0.75rem;
-      margin-top: 1.5rem;
-      font-size: 1rem;
+    .btn-danger {
+      background-color: #EA0000D9;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      font-size: 0.875rem;
     }
-
-    .spinner {
-      width: 1.5rem;
-      height: 1.5rem;
-      border: 3px solid var(--primary-color);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+    .btn-danger:hover {
+      background-color: #FF0000;
+      transform: translateY(-1px);
+      color: #000000D9;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .btn-danger:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #ef4444;
     }
-
-    #termsContainer {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 0.75rem;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    header {
+      background-color: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 0.75rem 1.5rem;
     }
-
-    #termsContainer h4 {
-      margin-bottom: 0.75rem;
-      color: var(--primary-color);
+    section[aria-label="Navegação lateral"] button {
+      background-color: #1e293b;
+      color: #9ca3af;
+      padding: 0.75rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    section[aria-label="Navegação lateral"] button:hover,
+    section[aria-label="Navegação lateral"] button:focus {
+      background-color: #EB2525;
+      color: #ffffff;
+      outline: none;
+    }
+    /* Prism customizations */
+    .token.keyword {
+      color: #3b82f6 !important;
       font-weight: 600;
     }
-
-    footer {
-      margin-top: auto;
-      padding: 1.5rem;
-      text-align: center;
-      background: var(--card-bg);
-      color: var(--text-light);
-      font-size: 0.9rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    .token.string {
+      color: #22c55e !important;
     }
-
-    .footer-icons {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 0.75rem;
+    .token.comment {
+      color: #64748b !important;
+      font-style: italic;
     }
-
-    .footer-icons a {
-      color: var(--text-light);
-      transition: var(--transition);
+    .token.number {
+      color: #f87171 !important;
     }
-
-    .footer-icons a:hover {
-      color: var(--primary-color);
-      transform: scale(1.1);
+    .token.operator {
+      color: #60a5fa !important;
     }
-
-    .footer-icons svg {
-      width: 1.75rem;
-      height: 1.75rem;
+    .token.function {
+      color: #38bdf8 !important;
     }
-
-    .bonus {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      margin: 1rem 0;
-      color: var(--primary-color);
-      font-weight: 600;
+    .token.builtin {
+      color: #a78bfa !important;
     }
-
-    .faq {
-      margin-top: 1.5rem;
+    .token.variable {
+      color: #facc15 !important; /* Yellow-400 */
     }
-
-    .faq details {
-      margin-bottom: 0.75rem;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .token.punctuation {
+      color: #94a3b8 !important; /* Slate-400 */
     }
-
-    .faq summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--text-light);
+    .token.boolean {
+      color: #fb923c !important; /* Orange-400 */
     }
-
-    .promo-section {
-      margin-top: 1.5rem;
+    .token.list {
+      color: #2dd4bf !important; /* Teal-400 */
     }
-
-    .promo-plan {
-      position: relative;
-      background-size: cover;
-      background-position: center;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      color: #FFF;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-      transition: var(--transition);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
-    }
-
-    .promo-plan:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow);
-      border-color: var(--primary-color);
-    }
-
-    .promo-plan h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .promo-plan p {
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-
-    .promo-plan button {
-      background: var(--gradient);
-      color: #FFF;
-      padding: 0.75rem;
-      font-size: 0.95rem;
-    }
-
-    .promo-plan .limited {
-      position: absolute;
-      top: -0.75rem;
-      right: 0.75rem;
-      background: var(--accent-color);
-      color: #FFF;
-      padding: 0.375rem 0.75rem;
-      border-radius: 1rem;
-      font-size: 0.8rem;
+    .token.error {
+      color: #ef4444 !important;
       font-weight: 700;
+      background-color: #7f1d1d;
+      padding: 0 2px;
+      border-radius: 2px;
     }
-
-    @media (max-width: 600px) {
-      .container {
-        margin: 0;
-        padding: 1.5rem;
-        border-radius: 0;
-        min-height: 100vh;
+    @media (max-width: 768px) {
+      .editor-container {
+        flex-direction: column;
       }
-
-      h2 {
-        font-size: 1.75rem;
+      .line-numbers {
+        display: none;
       }
-
-      .nav-menu {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      .terminal {
+        max-height: 200px;
       }
-
-      .nav-menu button {
-        font-size: 0.85rem;
-        padding: 0.75rem;
+      .btn-primary,
+      .btn-danger {
+        padding: 0.5rem;
+        font-size: 0.75rem;
       }
-
-      button {
-        font-size: 0.95rem;
+      header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
       }
-
-      .promo-plan {
-        background-position: top;
+      nav {
+        flex-wrap: wrap;
+        gap: 0.5rem;
       }
     }
   </style>
-</head>
-<body>
-  <div class="container">
-    <!-- Cadastro -->
-    <div id="step1">
-      <h2>Cadastro Rápido</h2>
-      <p class="social-proof">Mais de <span class="highlight">10.000 clientes</span> confiam em nossos planos!</p>
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" required />
-
-      <label for="phone">Celular (Brasil):</label>
-      <input type="tel" id="phone" placeholder="11912345678" required />
-
-      <label for="password">Senha:</label>
-      <input type="password" id="password" required />
-
-      <label for="carrier">Operadora:</label>
-      <select id="carrier" required>
-        <option value="">Selecione</option>
-        <option>Vivo</option>
-        <option>Claro</option>
-        <option>Oi</option>
-        <option>Tim</option>
-        <option>Outra</option>
-      </select>
-
-      <div id="termsContainer">
-        <h4>Termos e Política</h4>
-        <p>
-          Ao utilizar a plataforma, você aceita nossos termos de uso, política de propriedade e de pagamento. A responsabilidade da empresa limita-se ao período acordado e a danos comprovadamente causados por ela. Descuido por parte do usuário não será de nossa responsabilidade.
-        </p>
-        <label style="display: flex; align-items: center; gap: 8px;">
-          Eu li e concordo com os termos
-          <input type="checkbox" id="acceptTerms" />
-        </label>
-      </div>
-
-      <button onclick="goToDashboard()">Continuar</button>
+ </head>
+ <body class="h-full flex flex-col">
+  <header class="flex items-center justify-between bg-gray-800 px-4 py-3 shadow-md">
+   <div class="flex items-center space-x-3">
+    <img alt="Logo do Code Wodre, letras CW em azul sobre fundo azul escuro" class="w-10 h-10 rounded" height="40" src="/1000127988-01.jpeg" width="40"/>
+    <h1 class="text-2xl font-bold text-blue-400 select-none">
+     Cat-Code
+    </h1>
+   </div>
+   <nav class="flex space-x-3">
+    <button class="btn-primary px-4 py-2 rounded flex items-center space-x-2" id="btn-run" title="Executar código (Ctrl+Enter)">
+     <i class="fas fa-play">
+     </i>
+     <span>
+     </span>
+    </button>
+    <button class="btn-primary px-4 py-2 rounded flex items-center space-x-2" id="btn-save" title="Salvar arquivo">
+     <i class="fas fa-save">
+     </i>
+     <span>
+     </span>
+    </button>
+    <button class="btn-primary px-4 py-2 rounded flex items-center space-x-2" id="btn-open-folder" title="Selecionar pasta para salvar">
+     <i class="fas fa-folder-open">
+     </i>
+     <span>
+     </span>
+    </button>
+    <button class="btn-danger px-4 py-2 rounded flex items-center space-x-2" id="btn-clear-console" title="Limpar console">
+     <i class="fas fa-broom">
+     </i>
+     <span>
+      Limpar Console
+     </span>
+    </button>
+   </nav>
+  </header>
+  <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+   <section aria-label="Navegação lateral" class="flex flex-row md:flex-col md:w-16 bg-gray-800 text-gray-400 select-none">
+    <button class="p-3 hover:bg-blue-700 focus:bg-blue-700 focus:outline-none" id="btn-new-file" title="Novo arquivo">
+     <i class="fas fa-file-alt fa-lg">
+     </i>
+    </button>
+    <button class="p-3 hover:bg-blue-700 focus:bg-blue-700 focus:outline-none" id="btn-open-file" title="Abrir arquivo">
+     <i class="fas fa-folder fa-lg">
+     </i>
+    </button>
+    <button class="p-3 hover:bg-blue-700 focus:bg-blue-700 focus:outline-none" id="btn-install-pkg" title="Instalar biblioteca">
+     <i class="fas fa-box-open fa-lg">
+     </i>
+    </button>
+   </section>
+   <section class="flex-1 flex flex-col min-w-0">
+    <div class="editor-container h-full overflow-hidden">
+     <div aria-hidden="true" class="line-numbers bg-slate-800 select-none hidden md:block" id="line-numbers">
+     </div>
+     <textarea aria-label="Editor de código Python" autocapitalize="off" autocomplete="off" autocorrect="off" class="editor flex-1 resize-none p-4 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-blue-500" id="editor" placeholder="# Escreva seu código Python aqui..." rows="20" spellcheck="false" wrap="off"></textarea>
+     <pre id="editor-overlay" class="editor"><code class="language-python"></code></pre>
     </div>
-
-    <!-- Dashboard -->
-    <div id="dashboard" class="hidden">
-      <header>
-        <h2>Bem-vindo(a)!</h2>
-      </header>
-      <p>Explore as opções abaixo:</p>
-      <div class="nav-menu">
-        <button onclick="showSection('plans')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-          </svg>
-          Planos
-        </button>
-        <button onclick="showSection('support')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.4-3 4h2c0-1.6 3-2 3-4 0-2.21-1.79-4-4-4z"/>
-          </svg>
-          Suporte
-        </button>
-        <button onclick="showSection('account')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-          </svg>
-          Conta
-        </button>
-        <button onclick="showSection('promotions')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2L1 9v12h22V9L12 2zm-1 17h-2v-2h2v2zm4-4h-2v-2h2v2zm-2-8l-3 3 3 3 3-3-3-3z"/>
-          </svg>
-          Promoções
-        </button>
-        <button onclick="showSection('recharge')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 11l-4 4-4-4h3V9h2v6h3zm4-4l4 4 4-4h-3V9h-2v6h-3z"/>
-          </svg>
-          Recarga
-        </button>
-        <button onclick="showSection('settings')">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.49.49 0 0 0-.48-.41h-3.84a.49.49 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22l-1.92 3.32a.49.49 0 0 0 .12.61l2.03 1.58c-.04.3-.06.62-.06.94 0 .32.02.64.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32a.49.49 0 0 0 .59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54a.49.49 0 0 0 .48.41h3.84a.49.49 0 0 0 .48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96a.49.49 0 0 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-          </svg>
-          Configurações
-        </button>
-      </div>
-
-      <!-- Promoções Limitadas -->
-      <div class="promo-section">
-        <h2>Promoções Exclusivas</h2>
-        <p class="urgency">⏳ Ofertas válidas até meia-noite!</p>
-        <div class="promo-plan" style="background-image: url('https://images.unsplash.com/photo-1516321314538-3d25b1e15597?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60')">
-          <span class="limited">Exclusiva</span>
-          <h3>Ganhe 150 MB Grátis!</h3>
-          <p>Convide 3 amigos e receba 150 MB extras no seu plano!</p>
-          <button onclick="shareLink()">Compartilhar</button>
-        </div>
-        <div class="promo-plan" style="background-image: url('https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60')">
-          <span class="limited">Exclusiva</span>
-          <h3>Plano Turbo - 21 GB</h3>
-          <p>21 GB por R$20,00 e apenas R$10,00 no primeiro mês!</p>
-          <button onclick="alert('Assinatura iniciada! (Funcionalidade fictícia)')">Assinar</button>
-        </div>
-        <div class="promo-plan" style="background-image: url('https://images.unsplash.com/photo-1516321165247-7d868bd44b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60')">
-          <span class="limited">Exclusiva</span>
-          <h3>Bônus de 1 GB</h3>
-          <p>Adicione 1 GB extra por apenas R$1,10!</p>
-          <button onclick="alert('Assinatura iniciada! (Funcionalidade fictícia)')">Adicionar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Planos -->
-    <div id="plans" class="hidden">
-      <h2>Escolha Seu Plano</h2>
-      <p class="urgency">⏳ Apenas <span class="highlight">50 vagas</span> disponíveis!</p>
-      <div class="bonus">🎁 Assine agora e ganhe <span class="highlight">500 MB extras</span>!</div>
-      <div class="plan">
-        <strong>18 GB - R$20,00</strong>
-        <span class="popular">Mais Popular</span>
-        <p>Ideal para streaming e jogos online.</p>
-        <button onclick="showPayment('14 GB', 38)">Comprar</button>
-      </div>
-      <div class="plan">
-        <strong>8 GB - R$8,50</strong>
-        <p>Perfeito para redes sociais e navegação.</p>
-        <button onclick="showPayment('5 GB', 20)">Comprar</button>
-      </div>
-      <div class="plan">
-        <strong>590MB - R$3,50</strong>
-        <p>Ótimo para uso básico e mensagens.</p>
-        <button onclick="showPayment('2 GB', 5)">Comprar</button>
-      </div>
-      <button onclick="showSection('dashboard')">Voltar</button>
-    </div>
-    
-    <!-- Pagamento -->
-    <div id="payment" class="hidden">
-      <h2>Pagamento</h2>
-      <p>Plano: <span id="selectedPlan"></span></p>
-      <p>Com <span class="highlight">14% de desconto</span> (cartão): <span id="discountedPrice"></span></p>
-      <div class="bonus">🎉 Parabéns por escolher o <span id="planName"></span>! Você ganhou <span class="highlight">500 MB extras</span>!</div>
-
-      <div id="loadingMessage" class="loading">
-        <span class="spinner"></span>
-        Conectando...
-      </div>
-      <div id="qrContainer" class="qr hidden">
-        <p>Escaneie o QR Code ou copie a chave PIX:</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?data=00020126580014BR.GOV.BCB.PIX0136c10cdd98-ff7a-47c3-b03e-6893ca1094525204000053039865802BR5925JOHN%20BRENO%20DE%20SOUZA%20FREIR6006Macapa61086890669862070503***6304D305&size=200x200" alt="QR Code PIX" />
-        <p><strong>Chave PIX:</strong> 477901b6-8e9f-4c4b-bf38-d9ddac3d36a</p>
-        <button onclick="copyPix()">Copiar Chave</button>
-      </div>
-
-      <p id="paymentInfo" class="hidden">Realize o pagamento e sua internet será ativada em até 1 minuto!<br>Ative os dados móveis.</p>
-      <button onclick="showSection('dashboard')">Voltar</button>
-    </div>
-
-    <!-- Suporte -->
-    <div id="support" class="hidden">
-      <h2>Suporte</h2>
-      <p>Estamos prontos para ajudar!</p>
-      <button onclick="window.location.href='mailto:suporte@exemplo.com'">E-mail</button>
-      <button onclick="alert('Chat iniciado! (Funcionalidade fictícia)')">Chat ao Vivo</button>
-      <div class="faq">
-        <h4>Perguntas Frequentes</h4>
-        <details>
-          <summary>Como ativar meu plano?</summary>
-          <p>Após o pagamento, sua internet será ativada em até 1 minuto. Ative os dados móveis.</p>
-        </details>
-        <details>
-          <summary>Posso cancelar minha compra?</summary>
-          <p>Contate o suporte em até 7 dias para reembolso.</p>
-        </details>
-      </div>
-      <button onclick="showSection('dashboard')">Voltar</button>
-    </div>
-
-    <!-- Conta -->
-    <div id="account" class="hidden">
-      <h2>Minha Conta</h2>
-      <p><strong>E-mail:</strong> <span id="accountEmail"></span></p>
-      <p><strong>Celular:</strong> <span id="accountPhone"></span></p>
-      <p><strong>Operadora:</strong> <span id="accountCarrier"></span></p>
-      <button onclick="alert('Funcionalidade de edição em desenvolvimento.')">Editar</button>
-      <button onclick="showSection('dashboard')">Voltar</button>
-    </div>
-
-    <!-- Promoções -->
-    <div id="promotions" class="hidden">
-      <h2>Promoções</h2>
-      <p class="urgency">⏳ Ofertas válidas até hoje!</p>
-      <div class="plan">
-        <strong>Plano Família - 20 GB por R$50,00</strong>
-        <p>Compartilhe com até 3 pessoas!</p>
-        <button onclick="alert('Promoção selecionada! (Funcionalidade fictícia)')">Aproveitar</button>
-      </div>
-      <div class="plan">
-        <strong>Indique e Ganhe</strong>
-        <p>Indique um amigo e ganhe 1 GB grátis!</p>
-        <button onclick="alert('Link de indicação copiado! (Funcionalidade fictícia)')">Indicar</button>
-      </div>
-      <button onclick="showSection('dashboard')">Voltar</button>
-    </div>
-
-    <!-- Recarga para Outra Pessoa -->
-    <div id="recharge" class="hidden">
-      <h2>Recarga para Outros</h2>
-      <label for="rechargePhone">Celular (Brasil):</label>
-      <input type="tel" id="rechargePhone" placeholder="11912345678" required />
-      <label for="rechargePlan">Plano:</label>
-      <select id="rechargePlan" required>
-        <option value="">Selecione</option>
-        <option value="14 GB">30 GB - R$18,00</option>
-        <option value="5 GB">8 GB - R$7,00</option>
-        <option value="2 GB">2 GB - R$3,00</option>
-        <option value="250 MB">250 MB - R$0,80</option>
-      </select>
-      <button onclick="rechargeForOther()">Confirmar</button>
-      <button onclick="showSection('dashboard')">Voltar</button>
-
-      <div id="rechargeLoading" class="loading hidden">
-        <span class="spinner"></span>
-        Conectando...
-      </div>
-      <div id="rechargeQrContainer" class="qr hidden">
-        <p>Escaneie o QR Code ou copie a chave PIX:</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?data=00020126580014BR.GOV.BCB.PIX0136c10cdd98-ff7a-47c3-b03e-6893ca1094525204000053039865802BR5925JOHN%20BRENO%20DE%20SOUZA%20FREIR6006Macapa61086890669862070503***6304D305&size=200x200" alt="QR Code PIX" />
-        <p><strong>Chave PIX:</strong> 477901b6-8e9f-4c4b-bf38-d9ddac3d36a</p>
-        <button onclick="copyPix()">Copiar Chave</button>
-      </div>
-    </div>
-
-    <!-- Configurações -->
-    <div id="settings" class="hidden">
-      <h2>Configurações</h2>
-      <p>Personalize suas preferências:</p>
-      <label for="theme">Tema:</label>
-      <select id="theme">
-        <option value="dark">Escuro</option>
-        <option value="light">Claro</option>
-      </select>
-      <label for="notifications">Notificações:</label>
-      <select id="notifications">
-        <option value="on">Ativadas</option>
-        <option value="off">Desativadas</option>
-      </select>
-      <button onclick="alert('Configurações salvas! (Funcionalidade fictícia)')">Salvar</button>
-      <button onclick="showSection('dashboard')">Voltar</button>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-icons">
-      <a href="mailto:suporte@exemplo.com" title="Suporte">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2l-8 5-8-5V6h16z"/>
-        </svg>
-      </a>
-      <a href="mailto:denuncias@exemplo.com" title="Denunciar">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.4-3 4h2c0-1.6 3-2 3-4 0-2.21-1.79-4-4-4z"/>
-        </svg>
-      </a>
-    </div>
-    <p>© 2025 Cadastro e Internet. Todos os direitos reservados.</p>
-  </footer>
-
+   </section>
+  </main>
+  <section aria-label="Console de saída e erros" class="bg-gray-800 p-4 h-64 overflow-auto font-mono text-sm text-gray-300" id="console-section">
+   <div aria-live="polite" class="terminal" id="console-output" tabindex="0">
+   </div>
+  </section>
+  <input accept=".py" aria-hidden="true" id="file-input" style="display:none" type="file"/>
+  <input aria-hidden="true" directory="" id="folder-input" style="display:none" type="file" webkitdirectory=""/>
   <script>
-    function goToDashboard() {
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const password = document.getElementById("password").value;
-      const carrier = document.getElementById("carrier").value;
-      const accepted = document.getElementById("acceptTerms").checked;
+   // Editor, console, and line numbers references
+   const editor = document.getElementById('editor');
+   const editorOverlay = document.getElementById('editor-overlay').querySelector('code');
+   const consoleOutput = document.getElementById('console-output');
+   const lineNumbers = document.getElementById('line-numbers');
+   const fileInput = document.getElementById('file-input');
+   const folderInput = document.getElementById('folder-input');
 
-      if (!/^\d{11}$/.test(phone)) {
-        alert("Número inválido. Use 11 dígitos, ex: 11912345678");
-        return;
-      }
+   // State
+   let currentFileHandle = null;
+   let currentFolderHandle = null;
+   let installedPackages = new Set();
 
-      if (!carrier) {
-        alert("Selecione a operadora.");
-        return;
-      }
+   // Helper: update line numbers
+   function updateLineNumbers() {
+     const lines = editor.value.split('\n').length;
+     let numbers = '';
+     for (let i = 1; i <= lines; i++) {
+       numbers += i + '\n';
+     }
+     lineNumbers.textContent = numbers;
+   }
 
-      if (!accepted) {
-        alert("Você precisa aceitar os termos.");
-        return;
-      }
+   // Helper: update syntax highlighting
+   function updateSyntaxHighlighting() {
+     editorOverlay.textContent = editor.value;
+     Prism.highlightElement(editorOverlay);
+   }
 
-      localStorage.setItem("email", email);
-      localStorage.setItem("phone", phone);
-      localStorage.setItem("carrier", carrier);
+   // Initial setup
+   updateLineNumbers();
+   updateSyntaxHighlighting();
 
-      document.getElementById("step1").classList.add("hidden");
-      document.getElementById("dashboard").classList.remove("hidden");
+   // Update line numbers and syntax highlighting on input
+   editor.addEventListener('input', () => {
+     updateLineNumbers();
+     updateSyntaxHighlighting();
+     handleAutoPairing();
+     handleAutoInstallPackages();
+   });
 
-      document.getElementById("accountEmail").textContent = email;
-      document.getElementById("accountPhone").textContent = phone;
-      document.getElementById("accountCarrier").textContent = carrier;
-    }
+   // Sync scroll between editor, overlay, and line numbers
+   editor.addEventListener('scroll', () => {
+     lineNumbers.scrollTop = editor.scrollTop;
+     editorOverlay.parentElement.scrollTop = editor.scrollTop;
+     editorOverlay.parentElement.scrollLeft = editor.scrollLeft;
+   });
 
-    function showSection(sectionId) {
-      const sections = ["step1", "dashboard", "plans", "payment", "support", "account", "promotions", "recharge", "settings"];
-      sections.forEach(id => {
-        document.getElementById(id).classList.add("hidden");
-      });
-      document.getElementById(sectionId).classList.remove("hidden");
+   // Auto-pairing quotes and brackets
+   function handleAutoPairing() {
+     const pairs = {
+       '"': '"',
+       "'": "'",
+       '(': ')',
+       '[': ']',
+       '{': '}',
+     };
+     const pos = editor.selectionStart;
+     if (pos === 0) return;
+     const val = editor.value;
+     const lastChar = val[pos - 1];
+     if (pairs[lastChar]) {
+       if (val[pos] !== pairs[lastChar]) {
+         const before = val.substring(0, pos);
+         const after = val.substring(pos);
+         editor.value = before + pairs[lastChar] + after;
+         editor.selectionStart = editor.selectionEnd = pos;
+       }
+     }
+   }
 
-      document.getElementById("loadingMessage").classList.add("hidden");
-      document.getElementById("qrContainer").classList.add("hidden");
-      document.getElementById("rechargeLoading").classList.add("hidden");
-      document.getElementById("rechargeQrContainer").classList.add("hidden");
-      document.getElementById("paymentInfo").classList.add("hidden");
-    }
+   // Run Python code using Pyodide
+   let pyodide = null;
+   let pyodideReady = false;
 
-    function showPayment(plan, price) {
-      const discounted = (price * 0.86).toFixed(2);
-      document.getElementById("selectedPlan").textContent = `${plan} por R$${price.toFixed(2)}`;
-      document.getElementById("discountedPrice").textContent = `R$${discounted}`;
-      document.getElementById("planName").textContent = plan;
+   async function loadPyodideAndPackages() {
+     consoleOutput.textContent = 'Carregando ambiente Python...';
+     pyodide = await loadPyodide({
+       indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/',
+     });
+     pyodideReady = true;
+     consoleOutput.textContent = 'Ambiente Python carregado. Pronto para executar.';
+   }
 
-      showSection("payment");
-      document.getElementById("loadingMessage").classList.remove("hidden");
-      setTimeout(() => {
-        document.getElementById("loadingMessage").classList.add("hidden");
-        document.getElementById("qrContainer").classList.remove("hidden");
-      }, 4000);
-    }
+   // Load Pyodide script dynamically
+   const pyodideScript = document.createElement('script');
+   pyodideScript.src = 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js';
+   pyodideScript.onload = () => {
+     loadPyodideAndPackages();
+   };
+   document.body.appendChild(pyodideScript);
 
-    function copyPix() {
-      const pix = "477901b6-8e9f-4c4b-bf38-d9ddac3d36a";
-      navigator.clipboard.writeText(pix).then(() => {
-        document.getElementById("paymentInfo").classList.remove("hidden");
-      });
-    }
+   // Run code function
+   async function runCode() {
+     if (!pyodideReady) {
+       consoleOutput.textContent = 'Ambiente Python ainda não está pronto. Aguarde...';
+       return;
+     }
+     consoleOutput.textContent = '';
+     try {
+       pyodide.setStdout({
+         batched: (s) => {
+           consoleOutput.textContent += s;
+           consoleOutput.scrollTop = consoleOutput.scrollHeight;
+         },
+       });
+       pyodide.setStderr({
+         batched: (s) => {
+           consoleOutput.textContent += s;
+           consoleOutput.scrollTop = consoleOutput.scrollHeight;
+         },
+       });
+       await autoInstallPackagesFromCode(editor.value);
+       await pyodide.runPythonAsync(editor.value);
+     } catch (err) {
+       consoleOutput.textContent += '\n' + err.toString();
+     }
+   }
 
-    function rechargeForOther() {
-      const phone = document.getElementById("rechargePhone").value.trim();
-      const plan = document.getElementById("rechargePlan").value;
+   // Auto install packages by scanning import statements
+   async function autoInstallPackagesFromCode(code) {
+     if (!pyodideReady) return;
+     const importRegex = /^\s*(?:import|from)\s+([a-zA-Z0-9_]+)/gm;
+     let match;
+     const packagesToInstall = new Set();
+     while ((match = importRegex.exec(code)) !== null) {
+       const pkg = match[1];
+       if (!installedPackages.has(pkg) && pkg !== 'sys' && pkg !== 'os' && pkg !== 'math' && pkg !== 'time' && pkg !== 'random') {
+         packagesToInstall.add(pkg);
+       }
+     }
+     for (const pkg of packagesToInstall) {
+       consoleOutput.textContent += `\nInstalando biblioteca: ${pkg} ...`;
+       try {
+         await pyodide.loadPackage(pkg);
+         installedPackages.add(pkg);
+         consoleOutput.textContent += ` OK`;
+       } catch (e) {
+         consoleOutput.textContent += ` Falha ao instalar ${pkg}: ${e.message}`;
+       }
+     }
+   }
 
-      if (!/^\d{11}$/.test(phone)) {
-        alert("Número inválido. Use 11 dígitos, ex: 11912345678");
-        return;
-      }
+   // Handle auto install on input (debounced)
+   let installTimeout = null;
+   function handleAutoInstallPackages() {
+     clearTimeout(installTimeout);
+     installTimeout = setTimeout(() => {
+       autoInstallPackagesFromCode(editor.value);
+     }, 2000);
+   }
 
-      if (!plan) {
-        alert("Selecione um plano.");
-        return;
-      }
+   // Save file using File System Access API
+   async function saveFile() {
+     try {
+       if (!currentFileHandle) {
+         if (window.showSaveFilePicker) {
+           currentFileHandle = await window.showSaveFilePicker({
+             types: [
+               {
+                 description: 'Arquivos Python',
+                 accept: { 'text/x-python': ['.py'] },
+               },
+             ],
+           });
+         } else {
+           alert('Seu navegador não suporta salvar arquivos diretamente. Use copiar e colar.');
+           return;
+         }
+       }
+       const writable = await currentFileHandle.createWritable();
+       await writable.write(editor.value);
+       await writable.close();
+       alert('Arquivo salvo com sucesso!');
+     } catch (e) {
+       alert('Erro ao salvar arquivo: ' + e.message);
+     }
+   }
 
-      document.getElementById("rechargeLoading").classList.remove("hidden");
-      setTimeout(() => {
-        document.getElementById("rechargeLoading").classList.add("hidden");
-        document.getElementById("rechargeQrContainer").classList.remove("hidden");
-      }, 4000);
-    }
+   // Open file
+   fileInput.addEventListener('change', async (e) => {
+     const file = e.target.files[0];
+     if (!file) return;
+     const text = await file.text();
+     editor.value = text;
+     updateLineNumbers();
+     updateSyntaxHighlighting();
+     currentFileHandle = null;
+     consoleOutput.textContent = `Arquivo "${file.name}" carregado.`;
+     e.target.value = '';
+   });
 
-    function shareLink() {
-      const shareUrl = "https://exemplo.com/indique?ref=100MB";
-      const shareData = {
-        title: "Ganhe 100 MB Grátis!",
-        text: "Junte-se a mim e ganhe 100 MB grátis ao se cadastrar no nosso plano de internet!",
-        url: shareUrl
-      };
+   // Open folder (for saving files)
+   folderInput.addEventListener('change', async (e) => {
+     alert('Seleção de pasta feita. Salvará arquivos nesta pasta (funcionalidade limitada).');
+     currentFolderHandle = null;
+     e.target.value = '';
+   });
 
-      if (navigator.share) {
-        navigator.share(shareData).catch(err => {
-          console.error("Erro ao compartilhar:", err);
-          fallbackShare(shareUrl);
-        });
-      } else {
-        fallbackShare(shareUrl);
-      }
-    }
+   // Buttons events
+   document.getElementById('btn-run').addEventListener('click', runCode);
+   document.getElementById('btn-save').addEventListener('click', saveFile);
+   document.getElementById('btn-open-file').addEventListener('click', () => fileInput.click());
+   document.getElementById('btn-open-folder').addEventListener('click', async () => {
+     if (window.showDirectoryPicker) {
+       try {
+         currentFolderHandle = await window.showDirectoryPicker();
+         alert('Pasta selecionada para salvar arquivos.');
+       } catch {
+         alert('Seleção de pasta cancelada.');
+       }
+     } else {
+       alert('Seu navegador não suporta seleção de pasta.');
+     }
+   });
+   document.getElementById('btn-clear-console').addEventListener('click', () => {
+     consoleOutput.textContent = '';
+   });
 
-    function fallbackShare(url) {
-      navigator.clipboard.writeText(url).then(() => {
-        alert("Link copiado! Compartilhe com 3 amigos para ganhar 100 MB grátis.");
-      }).catch(err => {
-        alert("Erro ao copiar o link. Copie manualmente: " + url);
-      });
-    }
+   // New file clears editor and resets state
+   document.getElementById('btn-new-file').addEventListener('click', () => {
+     if (confirm('Criar novo arquivo? O conteúdo atual será perdido se não salvo.')) {
+       editor.value = '';
+       updateLineNumbers();
+       updateSyntaxHighlighting();
+       currentFileHandle = null;
+       consoleOutput.textContent = '';
+     }
+   });
+
+   // Install package manually prompt
+   document.getElementById('btn-install-pkg').addEventListener('click', async () => {
+     if (!pyodideReady) {
+       alert('Ambiente Python ainda não está pronto.');
+       return;
+     }
+     const pkg = prompt('Digite o nome da biblioteca Python para instalar:');
+     if (pkg) {
+       consoleOutput.textContent += `\nInstalando biblioteca: ${pkg} ...`;
+       try {
+         await pyodide.loadPackage(pkg);
+         installedPackages.add(pkg);
+         consoleOutput.textContent += ` OK`;
+       } catch (e) {
+         consoleOutput.textContent += ` Falha ao instalar ${pkg}: ${e.message}`;
+       }
+     }
+   });
+
+   // Keyboard shortcuts
+   window.addEventListener('keydown', (e) => {
+     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+       e.preventDefault();
+       runCode();
+     }
+     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+       e.preventDefault();
+       saveFile();
+     }
+   });
+
+   // Accessibility: focus console on output
+   function focusConsole() {
+     consoleOutput.focus();
+   }
+
+   // On run code, focus console
+   document.getElementById('btn-run').addEventListener('click', () => {
+     setTimeout(focusConsole, 100);
+   });
+
+   // On load, focus editor
+   window.addEventListener('load', () => {
+     editor.focus();
+   });
   </script>
-</body>
-</html> 
+ </body>
+</html>
